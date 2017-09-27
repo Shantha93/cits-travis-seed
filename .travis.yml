@@ -11,6 +11,7 @@ before_install:
   - export CITS_TAG=1.0
   - export CITS_REPO=CognizantQAHub/Cognizant-Intelligent-Test-Scripter
   - export CITS=Run.command
+  - export projectBing=$(pwd)/Projects/Bing
   - curl -O -L "https://github.com/$CITS_REPO/releases/download/$CITS_TAG/cognizant-intelligent-test-scripter-$CITS_VERSION-setup.zip"
   - unzip "cognizant-intelligent-test-scripter-$CITS_VERSION-setup.zip"
   - cd "cognizant-intelligent-test-scripter-$CITS_VERSION"
@@ -19,9 +20,10 @@ before_install:
  
 before_script:
   - "echo 'echo $*;exit 1;' > fail;chmod u+x fail;"
-  - export TEST="-project_location $(pwd)/Projects/Bing -scenario basic_search -testcase cortanna -browser PhantomJS"
+  - export TEST="-project_location $projectBing -scenario basic_search -testcase cortanna -browser PhantomJS"
   
 script: 
+  
   - "./$CITS -run $TEST  -dont_launch_report -standalone_report"
   - "export reportDir=$(./$CITS  $TEST -latest_exe_loc);./$CITS  $TEST -latest_exe_data_raw > report.json;"
   #- "failed=$(./$CITS  $TEST -latest_exe nofailTests);if [ $failed -ne 0 ]; then (./fail $failed Test/s failed); fi"
